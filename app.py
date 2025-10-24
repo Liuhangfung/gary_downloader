@@ -152,8 +152,8 @@ def download():
         ydl_opts = {
             'outtmpl': str(DOWNLOAD_FOLDER / '%(title)s.%(ext)s'),
             'progress_hooks': [progress_hook],
-            'prefer_ffmpeg': True,
             'fixup': 'detect_or_warn',  # Auto-fix MPEG-TS issues
+            'postprocessors': [],
         }
         
         if download_type == 'audio':
@@ -167,6 +167,12 @@ def download():
             ydl_opts['format'] = format_id
         else:
             ydl_opts['format'] = 'best'
+        
+        # Always add FFmpeg fixup for video downloads to fix MPEG-TS issues
+        if download_type != 'audio':
+            ydl_opts['postprocessors'].append({
+                'key': 'FFmpegFixupM3u8',
+            })
         
         def download_video():
             try:
