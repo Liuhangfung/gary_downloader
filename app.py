@@ -215,17 +215,26 @@ def download_file(filename):
     """Download a specific file to user's computer"""
     try:
         from urllib.parse import unquote
+        from flask import Response
         
         # Decode URL-encoded filename
         decoded_filename = unquote(filename)
         file_path = DOWNLOAD_FOLDER / decoded_filename
         
         if file_path.exists() and file_path.is_file():
+            # Get file size
+            file_size = file_path.stat().st_size
+            
+            # Use send_file with proper settings for large files
             return send_file(
                 file_path,
                 as_attachment=True,
                 download_name=decoded_filename,
-                mimetype='video/mp4'
+                mimetype='video/mp4',
+                conditional=True,
+                etag=True,
+                last_modified=file_path.stat().st_mtime,
+                max_age=0
             )
         else:
             # Debug: list available files
