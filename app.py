@@ -246,7 +246,11 @@ def download_file(filename):
             
             # Create response with proper headers
             response = Response(generate(), mimetype='video/mp4')
-            response.headers['Content-Disposition'] = f'attachment; filename="{decoded_filename}"'
+            
+            # Properly encode filename for Unicode characters (RFC 5987)
+            from urllib.parse import quote
+            encoded_filename = quote(decoded_filename.encode('utf-8'))
+            response.headers['Content-Disposition'] = f"attachment; filename*=UTF-8''{encoded_filename}"
             response.headers['Content-Length'] = str(file_size)
             response.headers['Accept-Ranges'] = 'bytes'
             response.headers['Cache-Control'] = 'no-cache'
