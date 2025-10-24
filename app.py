@@ -152,6 +152,8 @@ def download():
         ydl_opts = {
             'outtmpl': str(DOWNLOAD_FOLDER / '%(title)s.%(ext)s'),
             'progress_hooks': [progress_hook],
+            'prefer_ffmpeg': True,
+            'fixup': 'detect_or_warn',  # Auto-fix MPEG-TS issues
         }
         
         if download_type == 'audio':
