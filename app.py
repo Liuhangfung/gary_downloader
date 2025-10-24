@@ -224,6 +224,7 @@ def download_file(filename):
     try:
         from urllib.parse import unquote
         from flask import Response
+        import os
         
         # Decode URL-encoded filename
         decoded_filename = unquote(filename)
@@ -233,17 +234,24 @@ def download_file(filename):
             # Get file size
             file_size = file_path.stat().st_size
             
-            # Use send_file with proper settings for large files
-            return send_file(
-                file_path,
-                as_attachment=True,
-                download_name=decoded_filename,
-                mimetype='video/mp4',
-                conditional=True,
-                etag=True,
-                last_modified=file_path.stat().st_mtime,
-                max_age=0
-            )
+            # Stream file in chunks for large files
+            def generate():
+                with open(file_path, 'rb') as f:
+                    chunk_size = 1024 * 1024  # 1MB chunks
+                    while True:
+                        chunk = f.read(chunk_size)
+                        if not chunk:
+                            break
+                        yield chunk
+            
+            # Create response with proper headers
+            response = Response(generate(), mimetype='video/mp4')
+            response.headers['Content-Disposition'] = f'attachment; filename="{decoded_filename}"'
+            response.headers['Content-Length'] = str(file_size)
+            response.headers['Accept-Ranges'] = 'bytes'
+            response.headers['Cache-Control'] = 'no-cache'
+            
+            return response
         else:
             # Debug: list available files
             available_files = [f.name for f in DOWNLOAD_FOLDER.iterdir() if f.is_file()]
