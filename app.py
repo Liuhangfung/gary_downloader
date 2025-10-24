@@ -4,12 +4,15 @@ import os
 import json
 from pathlib import Path
 import threading
+import time
 
 app = Flask(__name__)
 
 # Configuration
 DOWNLOAD_FOLDER = Path('downloads')
 DOWNLOAD_FOLDER.mkdir(exist_ok=True)
+CLEANUP_INTERVAL = 300  # 5 minutes in seconds
+FILE_MAX_AGE = 300  # Delete files older than 5 minutes
 
 # Store download progress
 download_progress = {}
@@ -47,6 +50,43 @@ def format_bytes(bytes_value):
             return f"{bytes_value:.1f} {unit}"
         bytes_value /= 1024.0
     return f"{bytes_value:.1f} TB"
+
+def cleanup_old_files():
+    """Delete files older than FILE_MAX_AGE seconds"""
+    try:
+        current_time = time.time()
+        deleted_count = 0
+        
+        for file in DOWNLOAD_FOLDER.iterdir():
+            if file.is_file() and not file.name.startswith('.'):
+                # Get file age
+                file_age = current_time - file.stat().st_mtime
+                
+                # Delete if older than max age
+                if file_age > FILE_MAX_AGE:
+                    try:
+                        file.unlink()
+                        deleted_count += 1
+                        print(f"🗑️  Deleted old file: {file.name} (age: {int(file_age/60)} minutes)")
+                    except Exception as e:
+                        print(f"❌ Error deleting {file.name}: {e}")
+        
+        if deleted_count > 0:
+            print(f"✅ Cleanup complete: {deleted_count} file(s) deleted")
+        
+    except Exception as e:
+        print(f"❌ Cleanup error: {e}")
+
+def cleanup_scheduler():
+    """Run cleanup every CLEANUP_INTERVAL seconds"""
+    while True:
+        time.sleep(CLEANUP_INTERVAL)
+        cleanup_old_files()
+
+# Start cleanup thread
+cleanup_thread = threading.Thread(target=cleanup_scheduler, daemon=True)
+cleanup_thread.start()
+print(f"🧹 Auto-cleanup enabled: Files will be deleted after {FILE_MAX_AGE//60} minutes")
 
 @app.route('/')
 def index():
@@ -179,7 +219,8 @@ def download_file(filename):
             return send_file(
                 file_path,
                 as_attachment=True,
-                download_name=filename
+                download_name=filename,
+                mimetype='video/mp4'
             )
         else:
             return jsonify({'error': 'File not found'}), 404
