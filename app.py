@@ -214,16 +214,27 @@ def list_downloads():
 def download_file(filename):
     """Download a specific file to user's computer"""
     try:
-        file_path = DOWNLOAD_FOLDER / filename
+        from urllib.parse import unquote
+        
+        # Decode URL-encoded filename
+        decoded_filename = unquote(filename)
+        file_path = DOWNLOAD_FOLDER / decoded_filename
+        
         if file_path.exists() and file_path.is_file():
             return send_file(
                 file_path,
                 as_attachment=True,
-                download_name=filename,
+                download_name=decoded_filename,
                 mimetype='video/mp4'
             )
         else:
-            return jsonify({'error': 'File not found'}), 404
+            # Debug: list available files
+            available_files = [f.name for f in DOWNLOAD_FOLDER.iterdir() if f.is_file()]
+            return jsonify({
+                'error': 'File not found',
+                'requested': decoded_filename,
+                'available_files': available_files
+            }), 404
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
