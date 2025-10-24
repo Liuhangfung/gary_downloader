@@ -154,6 +154,7 @@ def download():
             'progress_hooks': [progress_hook],
             'fixup': 'detect_or_warn',  # Auto-fix MPEG-TS issues
             'postprocessors': [],
+            'ffmpeg_location': '/usr/bin/ffmpeg',  # Explicit FFmpeg path
         }
         
         if download_type == 'audio':
