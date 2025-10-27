@@ -1,0 +1,93 @@
+╔═══════════════════════════════════════════════════════╗
+║           GARY DOWNLOADER - USER GUIDE               ║
+╚═══════════════════════════════════════════════════════╝
+
+🎬 HOW TO USE:
+─────────────────────────────────────────────────────────
+
+1. Double-click GaryDownloader.exe
+
+2. Your web browser will open automatically
+
+3. Paste a video URL in the input box
+
+4. Click "Download" button
+
+5. Wait for download to complete
+
+6. Find your video in the "downloads" folder
+
+
+📱 SUPPORTED WEBSITES:
+─────────────────────────────────────────────────────────
+
+✓ YouTube
+✓ TikTok
+✓ Instagram  
+✓ Twitter / X
+✓ Facebook
+✓ Vimeo
+✓ And 1000+ more sites!
+
+
+⚙️ FEATURES:
+─────────────────────────────────────────────────────────
+
+📥 Download videos in best quality
+🎵 Extract audio only (MP3)
+ℹ️ Get video info before downloading
+📊 Real-time download progress
+🗂️ Manage downloaded files
+🧹 Auto-cleanup old files (after 5 minutes)
+
+
+💡 TIPS:
+─────────────────────────────────────────────────────────
+
+• Click "Get Info" to see video details first
+• Use "Audio Only" option to download just the music
+• Files auto-delete after 5 minutes to save space
+• Close the program window to stop the downloader
+
+
+❓ TROUBLESHOOTING:
+─────────────────────────────────────────────────────────
+
+Problem: Browser doesn't open
+Solution: Manually open: http://localhost:5000
+
+Problem: Download fails
+Solution: Check your internet connection
+
+Problem: Video won't play
+Solution: Install VLC Media Player (free)
+         Download: https://www.videolan.org/vlc/
+
+
+📂 FILE LOCATIONS:
+─────────────────────────────────────────────────────────
+
+Downloaded videos: "downloads" folder
+(Created next to GaryDownloader.exe)
+
+
+🔒 PRIVACY & SECURITY:
+─────────────────────────────────────────────────────────
+
+✓ No data collection
+✓ Runs locally on your computer
+✓ No internet connection except for downloads
+✓ Open source code available
+
+
+📞 NEED HELP?
+─────────────────────────────────────────────────────────
+
+GitHub: https://github.com/Liuhangfung/gary_downloader
+Issues: Report bugs on GitHub
+
+
+═══════════════════════════════════════════════════════
+
+Enjoy downloading! 🚀
+
