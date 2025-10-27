@@ -303,9 +303,31 @@
         .loading.show {
             display: flex;
         }
+
+        .btn-shutdown {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: #ff4444;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .btn-shutdown:hover {
+            background: #cc0000;
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
+    <button class="btn-shutdown" onclick="shutdownServer()">🛑 Shut Down</button>
+    
     <div class="container">
         <div class="header">
             <h1>🎬 GARY DOWNLOADER</h1>
@@ -556,6 +578,34 @@
 
         // Load downloads on page load
         loadDownloads();
+
+        // Shutdown server
+        async function shutdownServer() {
+            if (confirm('Are you sure you want to shut down GARY DOWNLOADER?')) {
+                try {
+                    const response = await fetch('/api/shutdown', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'}
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        document.body.innerHTML = `
+                            <div style="display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                <div style="background: white; padding: 40px; border-radius: 20px; text-align: center;">
+                                    <h1 style="font-size: 3em; margin-bottom: 20px;">👋</h1>
+                                    <h2 style="color: #333;">GARY DOWNLOADER Shut Down</h2>
+                                    <p style="color: #666; margin-top: 20px;">You can close this window now.</p>
+                                </div>
+                            </div>
+                        `;
+                    }
+                } catch (error) {
+                    console.log('Server shut down');
+                }
+            }
+        }
     </script>
 </body>
 </html>

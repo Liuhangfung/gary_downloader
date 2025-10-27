@@ -215,6 +215,25 @@ def list_downloads():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/api/shutdown', methods=['POST'])
+def shutdown():
+    """Shutdown the server"""
+    try:
+        import signal
+        print("\n🛑 Shutdown requested from web interface...")
+        print("👋 Goodbye!")
+        
+        # Give time for response to be sent
+        def shutdown_server():
+            import time
+            time.sleep(1)
+            os.kill(os.getpid(), signal.SIGINT)
+        
+        threading.Thread(target=shutdown_server, daemon=True).start()
+        return jsonify({'success': True, 'message': 'Server shutting down...'})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/api/download-file/<path:filename>', methods=['GET'])
 def download_file(filename):
     """Download a specific file to user's computer"""
@@ -265,11 +284,13 @@ def download_file(filename):
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
+    PORT = 5000  # Change this if port 5000 is in use
+    
     print("=" * 60)
     print("🚀 GARY_DOWNLOADER - Web UI")
     print("=" * 60)
-    print("📱 Open your browser and go to: http://localhost:5000")
+    print(f"📱 Open your browser and go to: http://localhost:{PORT}")
     print("💾 Downloads will be saved to:", DOWNLOAD_FOLDER.absolute())
     print("=" * 60)
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=PORT)
 
