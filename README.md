@@ -6,7 +6,21 @@ A beautiful web-based video downloader powered by yt-dlp with a modern UI.
 ![Python](https://img.shields.io/badge/python-3.7+-blue.svg)
 ![License](https://img.shields.io/badge/license-Unlicense-green.svg)
 
-## 🚀 Quick Start
+---
+
+## 📥 **Download for Windows (Easy Way!)**
+
+### **👉 [Download GaryDownloader.exe](https://github.com/Liuhangfung/gary_downloader/releases) 👈**
+
+**No Python? No problem!** Just download, double-click, and start downloading videos!
+
+✅ No installation required  
+✅ No Python needed  
+✅ Just run and go!
+
+---
+
+## 🚀 Quick Start (For Developers)
 
 ### Easiest Way: Double-Click to Start!
 ```
