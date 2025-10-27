@@ -152,9 +152,7 @@ def download():
         ydl_opts = {
             'outtmpl': str(DOWNLOAD_FOLDER / '%(title)s.%(ext)s'),
             'progress_hooks': [progress_hook],
-            'fixup': 'detect_or_warn',  # Auto-fix MPEG-TS issues
             'postprocessors': [],
-            'ffmpeg_location': '/usr/bin/ffmpeg',  # Explicit FFmpeg path
         }
         
         if download_type == 'audio':
@@ -169,11 +167,9 @@ def download():
         else:
             ydl_opts['format'] = 'best'
         
-        # Always add FFmpeg fixup for video downloads to fix MPEG-TS issues
-        if download_type != 'audio':
-            ydl_opts['postprocessors'].append({
-                'key': 'FFmpegFixupM3u8',
-            })
+        # Note: FFmpeg post-processing can cause hangs
+        # Videos will download but may have container issues
+        # Users should use VLC player which handles these issues
         
         def download_video():
             try:
